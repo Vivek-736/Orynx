@@ -1,0 +1,18 @@
+import { PageHeader } from "../page-header";
+import { DashboardHeader } from "./dashboard-header";
+import { HeroPattern } from "./hero-pattern";
+
+export default function DashboardView() {
+    return (
+        <div className="relative">
+            <PageHeader
+                title="Dashboard"
+                className="lg:hidden"
+            />
+            <HeroPattern />
+            <div className="relative space-y-8 p-4 lg:p-16">
+                <DashboardHeader />
+            </div>
+        </div>
+    )
+}
