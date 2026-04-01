@@ -10,7 +10,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Orynx - Your Voice AI Lab",
+  title: {
+    default: "Orynx - Your Voice AI Lab",
+    template: "%s | Orynx"
+  },
   description: "Orynx is an intelligent AI Powered voice ai lab for tts and voice cloning",
   icons: {
     icon: "/logo.svg",

@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { Coins } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { TEXT_MAX_LENGTH } from "@/data/constants";
+import { 
+    TEXT_MAX_LENGTH,
+    COST_PER_UNIT, 
+} from "@/data/constants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
@@ -24,7 +27,7 @@ export function TextInputPanel() {
                 <div className="space-y-4 rounded-2xl bg-white p-4 drop-shadow-xs">
                     <Textarea
                         placeholder="Start typing or paste your text here..."
-                        className="min-h-35 resize-none border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
+                        className="min-h-35 resize-none border-0 bg-transparent p-2 shadow-none focus-visible:ring-0"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         maxLength={TEXT_MAX_LENGTH}
@@ -39,13 +42,14 @@ export function TextInputPanel() {
                                 ) : (
                                     <>
                                         <span className="tabular-nums">
-                                            ${(text.length * 0.0003).toFixed(4)}
+                                            ${(text.length * COST_PER_UNIT).toFixed(4)}
                                         </span>{" "}
                                         estimated
                                     </>
                                 )}
                             </span>
                         </Badge>
+                        
                         <span className="text-xs text-muted-foreground">
                             {text.length.toLocaleString()} / {TEXT_MAX_LENGTH.toLocaleString()} characters
                         </span>
