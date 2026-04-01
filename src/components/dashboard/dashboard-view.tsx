@@ -1,6 +1,8 @@
 import { PageHeader } from "../page-header";
 import { DashboardHeader } from "./dashboard-header";
 import { HeroPattern } from "./hero-pattern";
+import { QuickActionsPanel } from "./quick-actions-panel";
+import { TextInputPanel } from "./text-input-panel";
 
 export default function DashboardView() {
     return (
@@ -12,6 +14,8 @@ export default function DashboardView() {
             <HeroPattern />
             <div className="relative space-y-8 p-4 lg:p-16">
                 <DashboardHeader />
+                <TextInputPanel />
+                <QuickActionsPanel />
             </div>
         </div>
     )
