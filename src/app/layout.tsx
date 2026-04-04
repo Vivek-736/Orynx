@@ -1,6 +1,7 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import { TRPCReactProvider } from "@/trpc/client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 
@@ -33,17 +34,19 @@ export default function RootLayout({
         },
       }}
     >
-      <html
-        suppressHydrationWarning
-        lang="en"
-      >
-        <body
-          className={`${inter.className} antialiased`}
+      <TRPCReactProvider>
+        <html
+          suppressHydrationWarning
+          lang="en"
         >
-          {children}
-          <Toaster />
-        </body>
-      </html>
+          <body
+            className={`${inter.className} antialiased`}
+          >
+            {children}
+            <Toaster />
+          </body>
+        </html>
+      </TRPCReactProvider>
     </ClerkProvider>
   );
 }
