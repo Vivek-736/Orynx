@@ -1,12 +1,12 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Spline_Sans } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 
-const inter = Inter({
-  variable: "--font-inter",
+const spline = Spline_Sans({
+  variable: "--font-spline-sans",
   subsets: ["latin"],
 });
 
@@ -40,7 +40,7 @@ export default function RootLayout({
           lang="en"
         >
           <body
-            className={`${inter.className} antialiased`}
+            className={`${spline.className} antialiased`}
           >
             {children}
             <Toaster />
