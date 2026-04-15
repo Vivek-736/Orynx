@@ -2,8 +2,8 @@
 
 import modal
 
-R2_BUCKET_NAME = "<bucket-name>"
-R2_ACCOUNT_ID = "<account-id>"
+R2_BUCKET_NAME = "orynx-app"
+R2_ACCOUNT_ID = "dbbd45c2318fd027745b7fa979491da3"
 R2_MOUNT_PATH = "/r2"
 
 r2_bucket = modal.CloudBucketMount(
