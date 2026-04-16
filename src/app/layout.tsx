@@ -4,6 +4,7 @@ import { Spline_Sans } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/client";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const spline = Spline_Sans({
   variable: "--font-spline-sans",
@@ -42,7 +43,9 @@ export default function RootLayout({
           <body
             className={`${spline.className} antialiased`}
           >
-            {children}
+            <NuqsAdapter>
+              {children}
+            </NuqsAdapter>
             <Toaster />
           </body>
         </html>
