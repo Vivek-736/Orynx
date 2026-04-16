@@ -20,7 +20,7 @@ import { useTTSVoices } from "@/contexts/tts-voices-context";
 import { VoiceAvatar } from "@/components/voices/voice-avatar";
 import { ttsFormOptions } from "./text-to-speech-form";
 
-export function VoiceSelector() {
+export function VoiceSelector({ hideLabel }: { hideLabel?: boolean }) {
     const {
         customVoices,
         systemVoices,
@@ -44,7 +44,7 @@ export function VoiceSelector() {
 
     return (
         <Field>
-            <FieldLabel>Voice style</FieldLabel>
+            {!hideLabel && <FieldLabel>Voice style</FieldLabel>}
             <Select
                 value={voiceId}
                 onValueChange={(v) => form.setFieldValue("voiceId", v)}

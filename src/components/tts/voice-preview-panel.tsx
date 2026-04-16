@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Pause, Play, Download, Redo, Undo } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VoiceAvatar } from "@/components/voice-avatar";
 import { useWaveSurfer } from "@/hooks/use-wavesurfer";
 import { Spinner } from "@/components/ui/spinner";
+import { Pause, Play, Download, Redo, Undo } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type VoicePreviewPanelVoice = {
@@ -46,7 +46,7 @@ export function VoicePreviewPanel({
         seekForward,
     } = useWaveSurfer({
         url: audioUrl,
-        autoplay: true,
+        autoplay: false,
     });
 
     const handleDownload = () => {
@@ -171,7 +171,6 @@ export function VoicePreviewPanel({
                             Download
                         </Button>
                     </div>
-
                 </div>
             </div>
         </div>
