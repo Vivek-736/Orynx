@@ -16,11 +16,15 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useTypedAppFormContext } from "@/hooks/use-app-form";
-import { useTTSVoices } from "@/contexts/tts-voices-context";
 import { VoiceAvatar } from "@/components/voices/voice-avatar";
+import { useTTSVoices } from "@/contexts/tts-voices-context";
 import { ttsFormOptions } from "./text-to-speech-form";
+import { useParams, useRouter } from "next/navigation";
 
 export function VoiceSelector({ hideLabel }: { hideLabel?: boolean }) {
+    const params = useParams();
+    const router = useRouter();
+    const generationId = params.generationId as string | undefined;
     const {
         customVoices,
         systemVoices,
@@ -28,7 +32,10 @@ export function VoiceSelector({ hideLabel }: { hideLabel?: boolean }) {
     } = useTTSVoices();
 
     const form = useTypedAppFormContext(ttsFormOptions);
-    const voiceId = useStore(form.store, (s) => s.values.voiceId);
+    const store = useStore(form.store, (s) => s.values);
+    const voiceId = store.voiceId;
+    const text = store.text;
+    
     const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
     const selectedVoice = voices.find((v) => v.id === voiceId);
     const hasMissingSelectedVoice = Boolean(voiceId) && !selectedVoice;
@@ -47,7 +54,16 @@ export function VoiceSelector({ hideLabel }: { hideLabel?: boolean }) {
             {!hideLabel && <FieldLabel>Voice style</FieldLabel>}
             <Select
                 value={voiceId}
-                onValueChange={(v) => form.setFieldValue("voiceId", v)}
+                onValueChange={(v) => {
+                    if (generationId) {
+                        const searchParams = new URLSearchParams();
+                        searchParams.set("voiceId", v);
+                        if (text) searchParams.set("text", text);
+                        router.push(`/text-to-speech?${searchParams.toString()}`);
+                    } else {
+                        form.setFieldValue("voiceId", v);
+                    }
+                }}
                 disabled={isSubmitting}
             >
                 <SelectTrigger className="w-full h-auto gap-1 rounded-lg bg-white px-2 py-1">

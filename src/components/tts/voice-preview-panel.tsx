@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VoiceAvatar } from "@/components/voice-avatar";
-import { useWaveSurfer } from "@/hooks/use-wavesurfer";
-import { Spinner } from "@/components/ui/spinner";
 import { Pause, Play, Download, Redo, Undo } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { useWaveSurfer } from "@/hooks/use-wavesurfer";
+import { useAudio } from "@/contexts/audio-context";
 import { cn } from "@/lib/utils";
 
 type VoicePreviewPanelVoice = {
@@ -32,8 +33,12 @@ export function VoicePreviewPanel({
     text: string;
 }) {
     const [isDownloading, setIsDownloading] = useState(false);
+
     const selectedVoiceName = voice?.name ?? null;
     const selectedVoiceSeed = voice?.id ?? null;
+
+    const { playingId, play, pause } = useAudio();
+    const PREVIEW_ID = "main-preview";
 
     const {
         containerRef,
@@ -48,6 +53,21 @@ export function VoicePreviewPanel({
         url: audioUrl,
         autoplay: false,
     });
+
+    useEffect(() => {
+        if (playingId !== PREVIEW_ID && isPlaying) {
+            togglePlayPause();
+        }
+    }, [playingId, isPlaying, togglePlayPause]);
+
+    const handleTogglePlay = () => {
+        if (isPlaying) {
+            pause();
+        } else {
+            play(PREVIEW_ID);
+        }
+        togglePlayPause();
+    };
 
     const handleDownload = () => {
         setIsDownloading(true);
@@ -139,7 +159,7 @@ export function VoicePreviewPanel({
                             variant="default"
                             size="icon-lg"
                             className="rounded-full"
-                            onClick={togglePlayPause}
+                            onClick={handleTogglePlay}
                         >
                             {isPlaying ? (
                                 <Pause className="fill-background" />

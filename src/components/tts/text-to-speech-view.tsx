@@ -10,6 +10,7 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { VoicePreviewManager } from "./voice-preview-manager";
 import { TTSVoicesProvider } from "@/contexts/tts-voices-context";
+import { AudioProvider } from "@/contexts/audio-context";
 import { TextInputPanel } from "./text-input-panel";
 
 export function TextToSpeechView({ initialValues }: { initialValues?: Partial<TTSFormValues> }) {
@@ -33,16 +34,18 @@ export function TextToSpeechView({ initialValues }: { initialValues?: Partial<TT
     };
 
     return (
-        <TTSVoicesProvider value={{ customVoices, systemVoices, allVoices }}>
-            <TextToSpeechForm defaultValues={defaultValues}>
-                <div className="flex min-h-0 flex-1 overflow-hidden">
-                    <div className="flex min-h-0 flex-1 flex-col">
-                        <TextInputPanel />
-                        <VoicePreviewManager />
+        <AudioProvider>
+            <TTSVoicesProvider value={{ customVoices, systemVoices, allVoices }}>
+                <TextToSpeechForm defaultValues={defaultValues}>
+                    <div className="flex min-h-0 flex-1 overflow-hidden">
+                        <div className="flex min-h-0 flex-1 flex-col">
+                            <TextInputPanel />
+                            <VoicePreviewManager />
+                        </div>
+                        <SettingsPanel />
                     </div>
-                    <SettingsPanel />
-                </div>
-            </TextToSpeechForm>
-        </TTSVoicesProvider>
+                </TextToSpeechForm>
+            </TTSVoicesProvider>
+        </AudioProvider>
     );
 };

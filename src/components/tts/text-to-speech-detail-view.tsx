@@ -10,6 +10,7 @@ import {
 } from "@/components/tts/text-to-speech-form";
 import { TTSVoicesProvider } from "@/contexts/tts-voices-context";
 import { VoicePreviewMobile } from "@/components/tts/voice-preview-mobile";
+import { AudioProvider } from "@/contexts/audio-context";
 import { VoicePreviewPanel } from "@/components/tts/voice-preview-panel";
 
 export function TextToSpeechDetailView({
@@ -27,7 +28,6 @@ export function TextToSpeechDetailView({
             trpc.voices.getAll.queryOptions()
         ],
     });
-
     const data = generationQuery.data;
     const { custom: customVoices, system: systemVoices } = voicesQuery.data;
     const allVoices = [...customVoices, ...systemVoices];
@@ -54,25 +54,29 @@ export function TextToSpeechDetailView({
     };
 
     return (
-        <TTSVoicesProvider value={{ customVoices, systemVoices, allVoices }}>
-            <TextToSpeechForm key={generationId} defaultValues={defaultValues}>
-                <div className="flex min-h-0 flex-1 overflow-hidden">
-                    <div className="flex min-h-0 flex-1 flex-col">
-                        <TextInputPanel />
-                        <VoicePreviewMobile
-                            audioUrl={data.audioUrl}
-                            voice={generationVoice}
-                            text={data.text}
-                        />
-                        <VoicePreviewPanel
-                            audioUrl={data.audioUrl}
-                            voice={generationVoice}
-                            text={data.text}
-                        />
+        <AudioProvider>
+            <TTSVoicesProvider
+                value={{ customVoices, systemVoices, allVoices }}
+            >
+                <TextToSpeechForm key={generationId} defaultValues={defaultValues}>
+                    <div className="flex min-h-0 flex-1 overflow-hidden">
+                        <div className="flex min-h-0 flex-1 flex-col">
+                            <TextInputPanel />
+                            <VoicePreviewMobile
+                                audioUrl={data.audioUrl}
+                                voice={generationVoice}
+                                text={data.text}
+                            />
+                            <VoicePreviewPanel
+                                audioUrl={data.audioUrl}
+                                voice={generationVoice}
+                                text={data.text}
+                            />
+                        </div>
+                        <SettingsPanel />
                     </div>
-                    <SettingsPanel />
-                </div>
-            </TextToSpeechForm>
-        </TTSVoicesProvider>
+                </TextToSpeechForm>
+            </TTSVoicesProvider>
+        </AudioProvider>
     );
 };
