@@ -21,15 +21,15 @@ export function GenerateButton({
             size={size}
             className={className}
             onClick={onSubmit}
-            disabled={disabled}
+            disabled={disabled || isSubmitting}
         >
             {isSubmitting ? (
                 <>
-                    <Spinner className="size-3" />
+                    <Spinner className="mr-2 size-4" />
                     Generating...
                 </>
             ) : (
-                "Generate speech"
+                "Generate Speech"
             )}
         </Button>
     );

@@ -171,4 +171,16 @@ export const generationsRouter = createTRPCRouter({
                 id: generationId,
             };
         }),
+
+    getLatestByVoiceId: orgProcedure
+        .input(z.object({ voiceId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const generation = await prisma.generation.findFirst({
+                where: { voiceId: input.voiceId, orgId: ctx.orgId },
+                orderBy: { createdAt: "desc" },
+                select: { id: true },
+            });
+
+            return generation;
+        }),
 });

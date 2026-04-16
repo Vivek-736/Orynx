@@ -7,17 +7,20 @@ import {
     TEXT_MAX_LENGTH,
     COST_PER_UNIT, 
 } from "@/data/constants";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
+import { GenerateButton } from "../tts/generate-button";
 
 export function TextInputPanel() {
     const [text, setText] = useState("");
+    const [isGenerating, setIsGenerating] = useState(false);
     const router = useRouter();
 
     const handleGenerate = () => {
         const trimmed = text.trim();
         if (!trimmed) return;
+        
+        setIsGenerating(true);
         router.push(`/text-to-speech?text=${encodeURIComponent(trimmed)}`);
     };
 
@@ -31,8 +34,8 @@ export function TextInputPanel() {
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         maxLength={TEXT_MAX_LENGTH}
+                        disabled={isGenerating}
                     />
-
                     <div className="flex items-center justify-between">
                         <Badge variant="outline" className="gap-1.5 border-dashed">
                             <Coins className="size-3 text-chart-5" />
@@ -57,14 +60,13 @@ export function TextInputPanel() {
                 </div>
 
                 <div className="flex items-center justify-end p-3">
-                    <Button
+                    <GenerateButton
                         size="sm"
                         disabled={!text.trim()}
-                        onClick={handleGenerate}
+                        isSubmitting={isGenerating}
+                        onSubmit={handleGenerate}
                         className="w-full lg:w-auto"
-                    >
-                        Generate speech
-                    </Button>
+                    />
                 </div>
             </div>
         </div>
