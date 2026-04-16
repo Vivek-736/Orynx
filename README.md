@@ -19,10 +19,10 @@ Orynx is a state-of-the-art AI audio platform designed for creators, developers,
 
 - 🎙️ **Neural Text-to-Speech**: Crystal clear, emotionally aware voice synthesis across multiple languages.
 - 🧬 **Instant Voice Cloning**: Create a custom digital twin of any voice with as little as 10 seconds of source audio.
-- 🔍 **Voice Explorer**: A curated library of professional-grade voices categorized for every use case—from audiobooks to customer service.
+- 🔍 **Voice Explorer**: A curated library of professional-grade voices categorized for every use case.
 - ⚡ **Real-time Generation**: Optimized pipeline using Cloudflare R2 and tRPC for near-instant audio delivery.
-- 📱 **Adaptive UI**: A premium, glassmorphic dashboard experience that looks stunning on both desktop and mobile.
-- 🔐 **Secure by Design**: Integrated with Clerk for foolproof enterprise-grade authentication and organization management.
+- 📱 **Adaptive UI**: A premium dashboard experience that looks stunning on both desktop and mobile.
+- 🔐 **Secure by Design**: Integrated with Clerk for enterprise-grade authentication and organization management.
 
 ## 🛠️ Tech Stack
 
