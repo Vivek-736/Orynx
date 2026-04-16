@@ -27,16 +27,27 @@ export async function GET(
     }
 
     const signedUrl = await getSignedAudioUrl(generation.r2ObjectKey);
-    const audioResponse = await fetch(signedUrl);
+    console.log("Fetching audio from R2:", signedUrl);
 
-    if (!audioResponse.ok) {
-        return new Response("Failed to fetch audio", { status: 502 });
+    try {
+        const audioResponse = await fetch(signedUrl);
+
+        if (!audioResponse.ok) {
+            console.error("R2 fetch failed:", audioResponse.status, audioResponse.statusText);
+            return new Response("Failed to fetch audio from storage", { status: 502 });
+        }
+
+        const audioBuffer = await audioResponse.arrayBuffer();
+
+        return new Response(audioBuffer, {
+            headers: {
+                "Content-Type": "audio/wav",
+                "Content-Length": audioBuffer.byteLength.toString(),
+                "Cache-Control": "private, max-age=3600",
+            },
+        });
+    } catch (err) {
+        console.error("Audio proxy error:", err);
+        return new Response("Failed to stream audio", { status: 500 });
     }
-
-    return new Response(audioResponse.body, {
-        headers: {
-            "Content-Type": "audio/wav",
-            "Cache-Control": "private, max-age=3600",
-        },
-    });
 };

@@ -8,7 +8,7 @@ import {
     type TTSFormValues
 } from "./text-to-speech-form";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { VoicePreviewPlaceholder } from "./voice-preview-placeholder";
+import { VoicePreviewManager } from "./voice-preview-manager";
 import { TTSVoicesProvider } from "@/contexts/tts-voices-context";
 import { TextInputPanel } from "./text-input-panel";
 
@@ -38,7 +38,7 @@ export function TextToSpeechView({ initialValues }: { initialValues?: Partial<TT
                 <div className="flex min-h-0 flex-1 overflow-hidden">
                     <div className="flex min-h-0 flex-1 flex-col">
                         <TextInputPanel />
-                        <VoicePreviewPlaceholder />
+                        <VoicePreviewManager />
                     </div>
                     <SettingsPanel />
                 </div>

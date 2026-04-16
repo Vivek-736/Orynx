@@ -99,4 +99,36 @@ export const voicesRouter = createTRPCRouter({
 
             return { success: true };
         }),
+
+    getById: orgProcedure
+        .input(z.object({ id: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const voice = await prisma.voice.findUnique({
+                where: {
+                    id: input.id,
+                    OR: [
+                        { variant: "SYSTEM" },
+                        { variant: "CUSTOM", orgId: ctx.orgId, }
+                    ],
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    category: true,
+                    language: true,
+                    variant: true,
+                    r2ObjectKey: true,
+                },
+            });
+
+            if (!voice) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Voice not found",
+                });
+            }
+
+            return voice;
+        }),
 });

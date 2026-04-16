@@ -4,6 +4,7 @@ import {
     SidebarProvider 
 } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { trpc, prefetch } from "@/trpc/server";
 
 export default async function DashboardLayout({
     children
@@ -11,7 +12,10 @@ export default async function DashboardLayout({
     children: React.ReactNode
 }) {
     const cookieStore = await cookies();
+    
     const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
+    prefetch(trpc.voices.getAll.queryOptions());
 
     return (
         <SidebarProvider defaultOpen={defaultOpen} className="h-svh">
