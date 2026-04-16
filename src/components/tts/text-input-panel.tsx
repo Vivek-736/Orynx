@@ -11,6 +11,8 @@ import {
 } from "@/data/constants";
 import { ttsFormOptions } from "./text-to-speech-form";
 import { GenerateButton } from "./generate-button";
+import { VoiceSelector } from "./voice-selector";
+import { MobileHistoryDrawer } from "./mobile-history-drawer";
 
 export function TextInputPanel() {
     const form = useTypedAppFormContext(ttsFormOptions);
@@ -35,11 +37,17 @@ export function TextInputPanel() {
                 </form.Field>
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-background to-transparent" />
             </div>
-            
+
             <div className="shrink-0 p-4 lg:p-6">
                 <div className="flex flex-col gap-3 lg:hidden">
+                    <div className="flex items-end gap-2">
+                        <div className="flex-1">
+                            <VoiceSelector hideLabel />
+                        </div>
+                        <MobileHistoryDrawer />
+                    </div>
                     <GenerateButton
-                        className="w-full"
+                        className="w-full h-12 text-base font-semibold"
                         disabled={isSubmitting}
                         isSubmitting={isSubmitting}
                         onSubmit={() => form.handleSubmit()}
