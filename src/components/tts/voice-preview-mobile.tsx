@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { Pause, Play, Download } from "lucide-react";
+import { useEffect } from "react";
+import { Pause, Play, Download, Undo, Redo } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VoiceAvatar } from "@/components/voice-avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAudio } from "@/contexts/audio-context";
+import { useWaveSurfer } from "@/hooks/use-wavesurfer";
 
 type VoicePreviewMobileVoice = {
     id?: string;
@@ -21,49 +23,35 @@ export function VoicePreviewMobile({
     text: string;
 }) {
     const isMobile = useIsMobile();
-    const selectedVoiceName = voice?.name ?? null;
-    const selectedVoiceSeed = voice?.id ?? null;
+    const { playingId, play, pause } = useAudio();
+    
+    const PREVIEW_ID = "main-preview-mobile";
 
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const handlePlay = () => setIsPlaying(true);
-        const handlePause = () => setIsPlaying(false);
-        const handleEnded = () => setIsPlaying(false);
-
-        audio.addEventListener("play", handlePlay);
-        audio.addEventListener("pause", handlePause);
-        audio.addEventListener("ended", handleEnded);
-
-        audio.pause();
-        audio.currentTime = 0;
-
-        return () => {
-            audio.removeEventListener("play", handlePlay);
-            audio.removeEventListener("pause", handlePause);
-            audio.removeEventListener("ended", handleEnded);
-        };
-    }, [audioUrl]);
+    const {
+        containerRef,
+        isPlaying: wsPlaying,
+        isReady,
+        togglePlayPause,
+        seekBackward,
+        seekForward,
+    } = useWaveSurfer({
+        url: audioUrl,
+        autoplay: false,
+    });
 
     useEffect(() => {
-        if (!isMobile) {
-            audioRef.current?.pause();
+        if (playingId !== PREVIEW_ID && wsPlaying) {
+            togglePlayPause();
         }
-    }, [isMobile]);
+    }, [playingId, wsPlaying, togglePlayPause]);
 
-    const togglePlayPause = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (isPlaying) {
-            audio.pause();
+    const handlePlayPause = () => {
+        if (wsPlaying) {
+            pause();
         } else {
-            audio.play();
+            play(PREVIEW_ID);
         }
+        togglePlayPause();
     };
 
     const handleDownload = () => {
@@ -83,44 +71,56 @@ export function VoicePreviewMobile({
         document.body.removeChild(link);
     };
 
-    if (!audioUrl) return null;
+    if (!audioUrl || !isMobile) return null;
 
     return (
-        <div className="border-t lg:hidden p-4">
-            <audio ref={audioRef} src={audioUrl} />
+        <div className="border-t lg:hidden p-4 bg-muted/20">
+            <div className="mb-4">
+                <div ref={containerRef} className="w-full h-8 cursor-pointer" />
+            </div>
+
             <div className="grid grid-cols-[1fr_auto] items-center gap-4">
                 <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{text}</p>
-                    {selectedVoiceName && (
+                    {voice?.name && (
                         <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                             <VoiceAvatar
-                                seed={selectedVoiceSeed ?? selectedVoiceName}
-                                name={selectedVoiceName}
+                                seed={voice.id ?? voice.name}
+                                name={voice.name}
                                 className="shrink-0"
                             />
-                            <span className="truncate">{selectedVoiceName}</span>
+                            <span className="truncate">{voice.name}</span>
                         </div>
                     )}
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" onClick={handleDownload}>
-                        <Download className="size-4" />
+                <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon-sm" onClick={() => seekBackward(5)} disabled={!isReady}>
+                        <Undo className="size-4" />
                     </Button>
+                    
                     <Button
                         variant="default"
                         size="icon"
-                        className="rounded-full"
-                        onClick={togglePlayPause}
+                        className="rounded-full shrink-0"
+                        onClick={handlePlayPause}
                     >
-                        {isPlaying ? (
+                        {wsPlaying ? (
                             <Pause className="fill-background" />
                         ) : (
                             <Play className="fill-background" />
                         )}
                     </Button>
+
+                    <Button variant="ghost" size="icon-sm" onClick={() => seekForward(5)} disabled={!isReady}>
+                        <Redo className="size-4" />
+                    </Button>
+
+                    <Button variant="ghost" size="icon-sm" onClick={handleDownload}>
+                        <Download className="size-4" />
+                    </Button>
                 </div>
             </div>
         </div>
     );
-};
+}

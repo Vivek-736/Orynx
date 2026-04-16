@@ -10,12 +10,13 @@ import { VoicePreviewPlaceholder } from "./voice-preview-placeholder";
 export function VoicePreviewManager() {
     const form = useTypedAppFormContext(ttsFormOptions);
     const voiceId = useStore(form.store, (s) => s.values.voiceId);
+    const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
     const { allVoices } = useTTSVoices();
-    
+
     const selectedVoice = allVoices.find((v) => v.id === voiceId);
-    
-    if (!selectedVoice) {
-        return <VoicePreviewPlaceholder />;
+
+    if (!selectedVoice || isSubmitting) {
+        return <VoicePreviewPlaceholder isSubmitting={isSubmitting} />;
     }
 
     return (

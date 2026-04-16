@@ -67,7 +67,7 @@ export function TextToSpeechForm({
             } catch (error) {
                 const message =error instanceof Error ? error.message : "Failed to generate audio";
 
-                toast.error(message);
+                toast.error("Try going to dashboard and open text to speech page and try again.");
             }
         },
     });

@@ -12,10 +12,12 @@ import {
 import { ttsFormOptions } from "./text-to-speech-form";
 import { GenerateButton } from "./generate-button";
 import { VoiceSelector } from "./voice-selector";
-import { MobileHistoryDrawer } from "./mobile-history-drawer";
+import { MobileSettingsDrawer } from "./mobile-settings-drawer";
+import { PromptSuggestions } from "./prompt-suggestions";
 
 export function TextInputPanel() {
     const form = useTypedAppFormContext(ttsFormOptions);
+    
     const text = useStore(form.store, (s) => s.values.text);
     const isSubmitting = useStore(form.store, (s) => s.isSubmitting);
     const isValid = useStore(form.store, (s) => s.isValid);
@@ -39,12 +41,17 @@ export function TextInputPanel() {
             </div>
 
             <div className="shrink-0 p-4 lg:p-6">
+                {text.length === 0 && (
+                    <div className="mb-6">
+                        <PromptSuggestions onSelect={(p) => form.setFieldValue("text", p)} />
+                    </div>
+                )}
                 <div className="flex flex-col gap-3 lg:hidden">
                     <div className="flex items-end gap-2">
                         <div className="flex-1">
                             <VoiceSelector hideLabel />
                         </div>
-                        <MobileHistoryDrawer />
+                        <MobileSettingsDrawer />
                     </div>
                     <GenerateButton
                         className="w-full h-12 text-base font-semibold"
@@ -81,9 +88,6 @@ export function TextInputPanel() {
                     </div>
                 ) : (
                     <div className="hidden lg:block">
-                        <p className="text-sm text-muted-foreground">
-                            Get started by typing or pasting text above
-                        </p>
                     </div>
                 )}
             </div>
