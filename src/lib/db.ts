@@ -10,8 +10,12 @@ const globalForPrisma = global as unknown as {
 
 const pool = globalForPrisma.pgPool || new pg.Pool({
     connectionString: env.DATABASE_URL,
-    ssl: true,
-    max: 10,
+    ssl: {
+        rejectUnauthorized: false,
+    },
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
     keepAlive: true,
 });
 

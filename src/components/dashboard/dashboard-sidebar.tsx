@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import {
     Sidebar,
     SidebarContent,
@@ -32,6 +33,7 @@ import {
     Headphones
 } from "lucide-react";
 import Link from "next/link";
+import { VoiceCreateDialog } from "@/components/voices/voice-create-dialog";
 
 interface MenuItem {
     title: string;
@@ -95,6 +97,7 @@ function NavSection({ label, items, pathname }: NavSectionProps) {
 export function DashboardSidebar() {
     const pathname = usePathname();
     const clerk = useClerk();
+    const [isVoiceCreateOpen, setIsVoiceCreateOpen] = useState(false);
 
     const mainMenuItems: MenuItem[] = [
         {
@@ -115,7 +118,7 @@ export function DashboardSidebar() {
         {
             title: "Voice cloning",
             icon: Volume2,
-            onClick: () => { },
+            onClick: () => setIsVoiceCreateOpen(true),
         },
     ];
 
@@ -134,6 +137,10 @@ export function DashboardSidebar() {
 
     return (
         <>
+            <VoiceCreateDialog
+                open={isVoiceCreateOpen}
+                onOpenChange={setIsVoiceCreateOpen}
+            />
             <Sidebar collapsible="icon">
                 <SidebarHeader className="flex flex-col gap-4 pt-4">
                     <div
